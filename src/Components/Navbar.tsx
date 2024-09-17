@@ -138,13 +138,13 @@ function Navbar() {
   const handleAllClick = useCallback( ()=>{
     setDisplay(!display)
     setData(originalData)
-  } ,[])
+  } ,[data])
 
   const handleRegionClick = useCallback((region:string) => {
     const filteredData = data?.filter((country) => country.region == region )
     filteredData && setData(filteredData)
     setDisplay(!display)
-  }, [display])
+  }, [display, data])
 
   return (
     <div className= {container} >
