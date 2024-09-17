@@ -12,7 +12,6 @@ const appContainer = css`
   padding: 0rem 4rem;
   :global(){
     body{
-      background-color: #e9e9e9;
       margin: 0;
       min-height: 100vh;
       font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -22,17 +21,21 @@ const appContainer = css`
   }
 `
 
+
 export default function App() {
 
   const[data, setData] = useState<Data[] | null>(null)
+  const[originalData, setOrignalData] = useState<Data[] | null>(null)
   const[detailed, setDetailed] = useState <Data | null>(null)
   const[borderCountryNames, setBorderCountryNames] = useState<string[] | null>(null)
+  const[isDark, setIsDark] = useState<boolean>(false)
 
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all")
       .then((response) => response.json())
       .then((data) => {
         setData(data);
+        setOrignalData(data)
         console.log('api called') 
 
       });
@@ -46,11 +49,11 @@ export default function App() {
         const detailedData = data[index]
         setDetailed(detailedData)
       }
-      
+      console.log(detailed)
+
     }
     ,[data])
 
-    //console.log(detailed)
 
     useEffect(() => {
       if (detailed && data) {
@@ -69,8 +72,21 @@ export default function App() {
       
     } ,[borderCountryNames])
 
+    const handleBackClick = useCallback( ()=>{
+      setDetailed(null)
+    } ,[])
+
+    const toggleTheme = useCallback( ()=>{
+      setIsDark(!isDark)
+    } ,[isDark])
+
+    useEffect(() => {
+      document.body.style.backgroundColor = isDark ? '#14084d' : '#d4d3d3';
+    }, [isDark]);
+
+
   return (
-    <AppContext.Provider value={{data, detailed, handleCountryClick, borderCountryNames, handleBorderCountry}} >
+    <AppContext.Provider value={{data,setData,originalData, isDark, detailed, borderCountryNames, handleCountryClick, handleBorderCountry, handleBackClick, toggleTheme}} >
     <div className={appContainer}>
       <Top />
       <Navbar />

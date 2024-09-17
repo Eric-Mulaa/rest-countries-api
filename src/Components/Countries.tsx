@@ -35,6 +35,11 @@ const country = css`
   }
 `
 
+const darkCountry = css`
+background-color: #0b0a3a;
+color: white;
+`
+
 const imageContainer = css`
   height: 50%;
 `
@@ -63,13 +68,13 @@ const countriesLower = css`
 
 function Countries() {
 
-  const {data, handleCountryClick} = useAppContext()
+  const {data, isDark, handleCountryClick} = useAppContext()
 
   return (
     <div className={countriesContainer}>
       { data &&
         data.map((item, index) => (
-          <div key={item.name.common} className={country} onClick={()=>handleCountryClick(index)} >
+          <div key={item.name.common} className={`${country} ${isDark ? darkCountry : ''}`} onClick={()=>handleCountryClick(index)} >
             <div className={imageContainer}>
               <img className={image} src={item.flags.png} alt="" />
             </div>
