@@ -56,10 +56,10 @@ export default function App() {
 
 
     useEffect(() => {
-      if (detailed && data) {
+      if (detailed && originalData) {
         const borders = detailed.borders;
         const borderCountries =
-          data.filter((country) => borders && borders.includes(country.cca3)).map((country) => 
+          originalData.filter((country) => borders && borders.includes(country.cca3)).map((country) => 
             country.name.common) || null;
         setBorderCountryNames(borderCountries);
       }
@@ -67,7 +67,7 @@ export default function App() {
 
     const handleBorderCountry = useCallback( (index:number)=> {
       const countryName = borderCountryNames && borderCountryNames[index]
-      const newDetailedData = data?.find((country) => country.name.common == countryName)
+      const newDetailedData = originalData?.find((country) => country.name.common == countryName)
       setDetailed(newDetailedData || null )
       
     } ,[borderCountryNames])

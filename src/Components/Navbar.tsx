@@ -115,21 +115,23 @@ function Navbar() {
     }
   }, [])
 
-  const handleInputChange = useCallback( (e : React.ChangeEvent<HTMLInputElement>)=>{
-    setSearchValue(e.target.value)
-    setData(originalData)
-  } ,[data])
+  const handleInputChange = useCallback( (e : React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    everyInputChange(value); 
+  }, []);
 
-  const handleKeyPress = useCallback( (e : React.KeyboardEvent<HTMLInputElement>)=>{
-    if(e.key === 'Enter' && searchValue?.trim() !== '' ){
-      const filteredData = data?.filter((country) => 
-      country.name.common.toLowerCase().includes(searchValue?.toLowerCase()) )
+const everyInputChange = useCallback((value: string) => {
+    if (value.trim() !== '') {
+      const filteredData = originalData?.filter((country) =>
+        country.name.common.toLowerCase().includes(value.toLowerCase())
+      );
+      filteredData && setData(filteredData); 
+    } else {
+      setData(originalData); 
+    }
+  }, [data]);
 
-      if(filteredData){
-        setData(filteredData)
-      }
-    } 
-  } , [searchValue, data, setData])
 
   const handleDropDown = useCallback( () => {
     setDisplay(!display)
@@ -155,7 +157,6 @@ function Navbar() {
            <input ref={inputRef} 
            value={searchValue} 
            onChange={handleInputChange} 
-           onKeyPress={handleKeyPress} 
            className={` ${search} ${isDark ? darkSearch : ''} `} type="text" 
            placeholder="Search for a country..."
            />
